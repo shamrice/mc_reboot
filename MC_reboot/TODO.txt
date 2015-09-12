@@ -1,0 +1,172 @@
+
+Legend:
+    * = to do
+    ! = done with comment
+    # = done.
+    - = not a to do
+
+03-17-2015 @ 1:02AM
+    - Started working on data files to populate area badguys, items and npcs. So far the bad guys work
+      but you can't set the x/y coordinates yet.
+    * Having an issue setting up NPCs. For some reason, it appears that the NPC's text gets set to
+      "level01.map" instead of what's set in the file. When I step through the code, I see that it's getting
+      set to the correct string. I'm not sure where this bogus value is coming in.
+
+03-16-2015 @ 3:04AM
+    - Player is now healed through method of the player class that will only return true if the player
+      needs to be healed. The max health is a private member of the class and it's value is set in the
+      constructor. I did it this way in case down the line max health is upgradable.
+    - Sprites for player and badguys are only set once when they need to change. This saves an endless
+      amount of redundant calls to "SetSprite" if a player/badguy is dead or is currently hurt.
+    - Area inventory data complete overhaul. Area data is now set in the setAreaData method of the Engine
+      class. Data does not need to be reset because it includes all badguy, npc, and item data for the
+      whole map.
+    - Area items are now stored in the areaData->InventoryData property instead of a single screen
+      InventoryItem property inside the Engine class. This data persists between screens.
+    - Inventory sizes are now configurable. areas can set the number of items in their inventory. So if a
+      screen has 10 items, it can allocate the inventory slots needed. Player inventory slots are set as
+      well. This means possibility of upgrading inventory capacity later in the game.
+    - BadGuy and NPC data is now stored in the AreaData matrix. This data is loaded at runtime and
+      persists until the game is restarted. That way, badguy/npc x, y, alive, health, etc persists the
+      length of the game. This short update probably doesn't express how monumental this change is to
+      the overall gameplay quality of the whole game.
+    - Inventory list debug now shows area inventory as well as players.
+    - Much more misc. error checking added all over.
+    * AreaData should load from default area data file initially or if player has save file, load from
+      selected save file.
+    * AreaData matrix should be saved upon exit or save request so that area data does not reset.
+
+03-11-2015 @ 3:54AM
+    - Moved _playerProjectile to a member of the Player class and renamed it variable to "Weapon". Makes more
+      logical sense as it's a class for the player's weapons.
+    - Added ability to upgrade player's weapon based on what inventory item is picked up. Also changed
+      it from just damage to projectile distance as well as shot speed. (_stepDistance)
+    - Fussed around with inventory items. Items can now be used and equiped from the inventory.
+    - When health item is used, it is removed from the inventory and the player is healed up to
+      100 life.
+    ! Player Max life should be in text resources as its a global configurable value.
+
+        (UPDATE: See point on 3-16-15. Max health is now a private member of the player class)
+
+    - Weapons are equiped with the "w" key. To start, you have no weapon equiped until you pick
+      one up. Once equiped, it calls the Projectile.SetProjectile() method to set item to
+      currently equiped weapon. Still need nice Inventory UI to make this easier than hot keys and
+      "printf" on the console.
+    - Added dummy "Empty" InventoryItem to the item list as a place holder for when there is no
+      item present.
+    - Fixed misc. engine bugs.
+
+
+03-09-2015 @ 7:17PM
+    - Started adding inventory system. Player can pick up items into inventory.
+    - AreaData also has an inventory to hold items that are on that screen.
+    ! Player can not drop items from inventory yet.
+
+      (UPDATE: Player now has functionality to remove items from inventory)
+
+    * Need UI for inventory screen.
+    ! Need to think about a way to store this data when player leaves and comes back to an area.
+      Maybe a second AreaData item that keeps track of previously visited map areas item counts?
+
+      (UPDATE: BadGuy, NPC, Items, etc are now persisted inside the AreaData matrix. No second AreaData
+               property was needed. See update on 3-16-15 for full details.)
+
+03-09-2015 @ 3:54AM
+    - Not much to add here. Added about 30 sprites to the title template. All impassible. Probably not all
+      even useful. I realized after creating some areas that trees and rocks don't need to be rotated. They
+      look weird if they are.
+    - Added five more level screens. Engine runs great switching between them!
+    - Updated collision detection for player and badguy wtih new impassible tile sprites.
+    - Thinking that the player talks to first NPC who warns them of what they saw and they make their
+      way to a grave yard. (I'm thinking on screen 3,0. (Next screen not created yet. Also, I'm thinking
+      that the player finds their weapon either at the graveyard in 3,0 or at 2,0 right before it.
+    # Next up is to create items that the player can pick up as well as a manageable inventory system!
+    * Number of badguys, npcs and what they say need to be created in a levelxy.dat file. This gets loaded
+      into memory in the setAreaObjects method. This file should also list each xy location.
+
+03-08-2015 @ 5:57AM
+    - Collision detection for everything all under one roof! With collision detection between enemies,
+      they get jammed up like a blood clot if there's too many of them though.
+    - Added some randomization to bad guy's movement. This makes them a bit twitchy.. but if they end up
+      being zombies in the end, it could work.
+    - Tile engine created for building the level screens based on the .map text files. Also created a
+      few tiles based off of the rpg_net_alpha project but better. Collision detection exists against
+      specified tile id's. (Can use enumeration as well)
+    - Added "dead" icons for when the player or the enemies die.
+    - Cleaned up A LOT of the engine code. It runs really well. I've tested with 3000 bad guys
+      and 1000 NPCs on the screen. There was some slow down but it wasn't unmanageable. (That said, the
+      screen was literally just badguys and npcs...)
+    - Basic movement from screen to screen started. Currently there are two level maps in the world matrix.
+      There's the start screen and one to the right. Going back and forth between these two work. Going anywhere
+      else will seg fault because it will try to read non-existant data.
+    ! Bad guys/number of NPCs don't like to be changed from room to room. If you go from a room that has
+      2 bad guys to 3 bad guys, you get a seg fault. I think it has something to do with how the memory is
+      getting allocated/deleted when you move into the next room. Really need to look into this.
+      Worst case, I can allocate a max number of badguys and just specify the stats on all them. (x, y
+      and alive/visible using a loop)
+
+      (UPDATE: @6:04AM. Fixed it. Just had to delete the array from memory before reallocating it!)
+
+03-07-2015 @ 4:05AM
+    - Added NPC class with collision detection and messaging. This gives a way to have non-enemy characters.
+    - Added Messenger class. This class is used to display NPC conversations as well as player's current
+      health using the SDL_TTF library.
+    - Limited playfield in size so that there is a section for stats/messaging at the bottom of the screen.
+    - Player icon now shows red sprite when getting injured. Stays red on dead.
+    - Player is now limited to playfield. No more running out of bounds.
+    - BadGuys and NPCs are placed randomly in the playfield for debug purposes instead of in a row.
+    - Added ability to restart after you have died without having to quit.
+    - ImageResources is now a header file with a list of strings.
+        -> ! Might have to double back on this because there's a lot of "c_str()" calls everywhere now.
+        (UPDATE: No, this is fine. If the c_str() method call blows up with a seg fault, it should.
+                 No const string/#define resource should be NULL ever. This is a fatal error.)
+    - Changed TODO to just a normal work log with "To-do" markings.
+    - BadGuys now have set damage. Will probably develope this further when badguys have a type.
+    - Probably a whole lot more!
+
+03-07-2015 @ 12:00AM
+    ! Lives? Undecided if player should have more than one life or not.
+    (UPDATE: Added restart option to program... thinking maybe keep to one life)
+
+
+03-06-2015 @ 6:00PM:
+    # Bad guys need to have collision detection between them. They currently will ball up on top of
+      eachother. This leads to the projectile taking out all enemies standing together.
+    # Still need to work out moving from screen to screen and inanimate object collision detection.
+    # CheckCollision should be able to get two sprites passed to it and check instead of hard coding what
+      to check against.
+    # Game speed / Balance needs to be adjusted.
+    # Start thinking about picking up items. (upgrades etc)
+
+
+03-06-2015 @ 2:55AM:
+
+    # Player Projectile needs to be moved into it's own class (base class of Sprite)
+    # Collision detection isn't very pretty. Needs to be fixed. Not super high priority at the moment.
+    * BadGuy number is set by a #define... that's not going to work with more than one screen. Need to
+      dynamically set the number of bad guys for each screen.
+        -Maybe max bad guys in the #define? So they're allocated in memory, then set number visible/alive
+         with a SetUpArea() Method or something
+    # Currently no way to move screen to screen. Only one screen. Haven't though about how that's going
+      to work. Needs to work dynamically as well.
+        -Load up required images for screen and set up sprites as needed
+        -Perhaps a AreaResource class that gives number of bad guys, as well as which image resources
+         to use?
+    ! Different weapons should do different damage. Currently hardcoded at -25 a hit. Bad guys -5
+
+    (UPDATE: Weapon damage can now be set by Projectile->Damage property)
+
+    ! BadGuys should have types. Each type should be linked to health stats, damage, and image resource.
+
+    (UPDATE: Bad guys damage can be set and damage inflicted is from their private _damage property)
+
+    ! Need to think about either using "invisible" area boundries defined in the AreaResource or relying
+      on collision detection for inanimate objects based on their sprites. (Probably better to use
+      sprites)
+
+    (UPDATE: Will make an array of static items like the NPCs for this.)
+
+    # Need to incorporate SDL TTF so some text can be displayed on the screen.
+    # ImageResources might get moved to a .H file that is just full of "const string x_fileName" variables
+      or #defines. Would be easier than updating both class H and implementation file each time.
+    - All in all, not bad for fist day. Basically made a better Millenium Crisis than the original demo.

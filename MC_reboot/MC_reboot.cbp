@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MC_reboot" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/MC_reboot" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/MC_reboot" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`sdl-config --cflags`" />
+		</Compiler>
+		<Linker>
+			<Add option="`sdl-config --libs`" />
+			<Add library="SDL_ttf" />
+		</Linker>
+		<Unit filename="AreaData.cpp" />
+		<Unit filename="AreaData.h" />
+		<Unit filename="BadGuy.cpp" />
+		<Unit filename="BadGuy.h" />
+		<Unit filename="Engine.cpp" />
+		<Unit filename="Engine.h" />
+		<Unit filename="Enums.H" />
+		<Unit filename="Helvetica.ttf" />
+		<Unit filename="ImageResources.h" />
+		<Unit filename="Inventory.cpp" />
+		<Unit filename="Inventory.h" />
+		<Unit filename="InventoryItem.cpp" />
+		<Unit filename="InventoryItem.h" />
+		<Unit filename="Messenger.cpp" />
+		<Unit filename="Messenger.h" />
+		<Unit filename="NPC.cpp" />
+		<Unit filename="NPC.h" />
+		<Unit filename="Player.cpp" />
+		<Unit filename="Player.h" />
+		<Unit filename="Projectile.cpp" />
+		<Unit filename="Projectile.h" />
+		<Unit filename="Sprite.cpp" />
+		<Unit filename="Sprite.h" />
+		<Unit filename="TODO.txt" />
+		<Unit filename="TextResources.h" />
+		<Unit filename="Tile.cpp" />
+		<Unit filename="Tile.h" />
+		<Unit filename="Timer.cpp" />
+		<Unit filename="Timer.h" />
+		<Unit filename="badguy.bmp" />
+		<Unit filename="badguy_dead.bmp" />
+		<Unit filename="bg.bmp" />
+		<Unit filename="level.map" />
+		<Unit filename="level00.bg" />
+		<Unit filename="level00.dat" />
+		<Unit filename="level00.map" />
+		<Unit filename="level00.npc" />
+		<Unit filename="level01.dat" />
+		<Unit filename="level01.map" />
+		<Unit filename="level10.dat" />
+		<Unit filename="level10.map" />
+		<Unit filename="level11.dat" />
+		<Unit filename="level11.map" />
+		<Unit filename="level20.dat" />
+		<Unit filename="level20.map" />
+		<Unit filename="level21.dat" />
+		<Unit filename="level21.map" />
+		<Unit filename="main.cpp" />
+		<Unit filename="npc.bmp" />
+		<Unit filename="player.bmp" />
+		<Unit filename="player_dead.bmp" />
+		<Unit filename="player_hurt.bmp" />
+		<Unit filename="projectile.bmp" />
+		<Unit filename="test.bmp" />
+		<Unit filename="tile.bmp" />
+		<Unit filename="weapon.bmp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
