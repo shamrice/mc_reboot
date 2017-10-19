@@ -5,6 +5,19 @@ Legend:
     # = done.
     - = not a to do
 
+10-18-2017 @ 6:55PM
+    # Fixed issue with NPCs saying the garbage text. This was coming from a non terminated c string
+      causing the game to read past the data into other memory. I changed the code so that it would load
+      the text into a character buffer of 255 characters. (If it goes over in the file, the game will break)
+      Text works as expected now.
+    # Fixed another issue with the area inventory items not showing up on the first screen. The config
+      file for that area said there were zero items to be found. The set up method then allocated eight
+      items. Updating the level00.dat to eight items to match the set method fixed this issue.
+    * Console output shows sprite errors whenever an enemy or player is hit. Something is busted there.
+    - Probably the last update this code will ever see now that it's working as it should before I broke
+      it on 03-17-2015. Java version of this reboot is further along and cleaner. (This project could
+      be considered pointer hell at this point.
+
 03-17-2015 @ 1:02AM
     - Started working on data files to populate area badguys, items and npcs. So far the bad guys work
       but you can't set the x/y coordinates yet.

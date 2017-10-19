@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <iostream>
 
 Engine::Engine(int scrHeight, int scrWidth, bool fullScreen)
 {
@@ -240,6 +241,9 @@ void Engine::HandleEvents()
     for (int i = 0; i < _areaData[_player->MapXLocation][_player->MapYLocation]->GetNumberOfNPC(); i++){
         if (checkCollision(_areaData[_player->MapXLocation][_player->MapYLocation]->NpcData[i]->GetDestinationRect(), _player->GetDestinationRect())){
 
+            std::cout << "NPC NUM : " << i << std::endl;
+            std::cout << "NPC TEXT: " << _areaData[_player->MapXLocation][_player->MapYLocation]->NpcData[i]->GetText() << std::endl;
+
             //set messenger text as well as set as visible
             _msgr[CONVERSATION]->SetSprite(TTF_RenderText_Solid(_font, _areaData[_player->MapXLocation][_player->MapYLocation]->NpcData[i]->GetText(), _msgr[CONVERSATION]->TextColor), 10, PLAYFIELD_HEIGHT + 75);
             _msgr[CONVERSATION]->Visible = true;
@@ -378,7 +382,9 @@ void Engine::Restart()
 
 void Engine::PrintPlayerInventory(){
     printf("\n\nAREA INVENTORY\n-------------------\n");
-    for (int i = 0; i < _areaData[_player->MapXLocation][_player->MapYLocation]->InventoryData->GetNumSlots(); i++){
+    printf("\nNumSlotsFound (%d, %d): %d", _player->MapXLocation, _player->MapYLocation, _areaData[_player->MapXLocation][_player->MapYLocation]->InventoryData->GetNumSlots());
+
+    for (int i = 0; i < _areaData[_player->MapXLocation][_player->MapYLocation]->InventoryData->GetNumSlots(); i++) {
         InventoryItem *item = _areaData[_player->MapXLocation][_player->MapYLocation]->InventoryData->GetItem(i);
         printf("itemname: %s\nitemtype %d\nitemdamage: %d\n", item->Name.c_str(), item->Type, item->Damage);
     }
@@ -459,13 +465,12 @@ void Engine::setUpAreaData() {
             if (x == 0 && y == 0){
                 _areaData[x][y]->InventoryData->AddItem(new InventoryItem("PISTOL", WEAPON, 275, 75, true));
                 _areaData[x][y]->InventoryData->AddItem(new InventoryItem("GRAVEYARD KEY", KEY, 275, 180, true));
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 280, true));;
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 180, true));;
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 230, true));;
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 425, 380, true));;
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 625, 280, true));;
-                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 625, 180, true));;
-
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 280, true));
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 180, true));
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 475, 230, true));
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 425, 380, true));
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 625, 280, true));
+                _areaData[x][y]->InventoryData->AddItem(new InventoryItem("MEDKIT", HEALTH_ITEM, 625, 180, true));
             }
 
             //allocate bad guy and npc array items memory.
@@ -480,7 +485,8 @@ void Engine::setUpAreaData() {
                 std::ifstream npcDataFile(npcDataFilename.str().c_str());
 
                 int tempX = 0, tempY = 0;
-                std::string tempText = "";
+
+                char *tempText = new char[255];
 
                 if (NULL != npcDataFile){
                     npcDataFile >> tempX;
@@ -495,8 +501,8 @@ void Engine::setUpAreaData() {
                     npcDataFile.close();
                 }
 
+                _areaData[x][y]->NpcData[i] = new NPC(NPC_FILENAME.c_str(), tempX, tempY, true, tempText);
 
-                _areaData[x][y]->NpcData[i] = new NPC(NPC_FILENAME.c_str(), tempX, tempY, true, tempText.c_str());
             }
 
         }
